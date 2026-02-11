@@ -1,0 +1,180 @@
+📘 DAY 1 — Setup + Load CSV (Java ML Start)
+🎯 Today’s Goal
+
+By the end of today you will have:
+
+✅ Java 17 installed
+✅ IntelliJ IDEA project (Maven)
+✅ Smile library added
+✅ A CSV file loaded and printed (first 5 rows)
+✅ Your first “AI project” folder ready
+
+🧠 THEORY NOTES (Simple)
+What is Machine Learning (ML)?
+
+Machine Learning means:
+
+“Instead of writing rules manually, we train a model from data.”
+
+Funny example:
+
+If you try to write spam rules manually, you’ll end up like:
+
+“If message contains ‘FREE’, mark spam”
+
+“If message contains ‘WIN’, mark spam”
+
+“If message contains ‘CONGRATULATIONS’, mark spam”
+
+But spammers will write:
+
+“Fr€€”
+
+“W1n”
+
+“Congratzzzz”
+
+So ML is like hiring a smart bouncer who learns spam behavior from examples.
+
+🛠 PRACTICAL (Windows) — Step-by-step
+✅ Step 1 — Install Java 17 (10 min)
+Check if Java is already installed
+
+Open Command Prompt and run:
+
+java -version
+
+
+If you see Java 17 → good.
+
+If not:
+
+Install JDK 17 (Temurin / Oracle)
+
+Then run java -version again
+
+✅ Step 2 — Install IntelliJ IDEA (Community) (5 min)
+
+If already installed → skip.
+
+✅ Step 3 — Create a Maven Project (10 min)
+In IntelliJ:
+
+File → New Project
+
+Select Maven
+
+JDK = 17
+
+GroupId: com.darling.ai
+
+ArtifactId: day1-csv-loader
+
+Finish
+
+✅ Step 4 — Add Smile Dependency (10 min)
+
+Open pom.xml and add inside <dependencies>:
+
+<dependency>
+    <groupId>com.github.haifengl</groupId>
+    <artifactId>smile-core</artifactId>
+    <version>3.0.2</version>
+</dependency>
+
+<dependency>
+    <groupId>com.github.haifengl</groupId>
+    <artifactId>smile-io</artifactId>
+    <version>3.0.2</version>
+</dependency>
+
+
+Then click:
+✅ Load Maven Changes
+
+✅ Step 5 — Add a Dataset CSV (5 min)
+
+Create folder:
+
+src/main/resources/data/
+
+
+Create a file:
+
+src/main/resources/data/students.csv
+
+
+Paste this data:
+
+name,age,study_hours,marks
+Ravi,20,2,45
+Priya,21,5,78
+Aman,19,1,30
+Neha,22,6,88
+Rahul,20,3,60
+Sneha,21,4,72
+
+✅ Step 6 — Write Java Code to Load CSV (15 min)
+
+Create file:
+
+src/main/java/com/darling/ai/Day1CsvLoader.java
+
+
+Paste this:
+
+package com.darling.ai;
+
+import smile.data.DataFrame;
+import smile.io.Read;
+
+import java.nio.file.Paths;
+
+public class Day1CsvLoader {
+
+    public static void main(String[] args) throws Exception {
+
+        // Load CSV from resources folder
+        var path = Paths.get("src/main/resources/data/students.csv");
+
+        DataFrame df = Read.csv(path.toString());
+
+        System.out.println("=== Dataset Loaded Successfully ===");
+        System.out.println("Rows: " + df.nrows());
+        System.out.println("Columns: " + df.ncols());
+
+        System.out.println("\n=== First 5 Rows ===");
+        System.out.println(df.head(5));
+    }
+}
+
+✅ Step 7 — Run the Program (5 min)
+
+Right click → Run Day1CsvLoader
+
+You should see output like:
+
+Rows: 6
+Columns: 4
+
+
+and first 5 rows printed.
+
+✅ Mini Exercise (5 minutes)
+
+Edit the CSV:
+
+Add 2 more students
+
+Run again
+
+Confirm rows increase
+
+🧾 Today’s Notes Summary (Save this)
+Today you learned:
+
+ML projects start with data
+
+How to load CSV into a DataFrame using Smile
+
+How to check dataset size and preview data
