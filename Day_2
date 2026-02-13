@@ -1,0 +1,144 @@
+📘 DAY 2 (Java AI) — Data Preprocessing (Clean + Convert to Numbers)
+🎯 Goal of Day 2
+
+By the end of today, you will have:
+
+✅ Clean data loaded from CSV
+✅ Converted text → numbers
+✅ Created:
+
+double[][] X (features)
+
+double[] y (target)
+
+This is the exact format we need for training ML models tomorrow (Day 3).
+
+🧠 THEORY (Short but Strong)
+1) Why Preprocessing?
+
+Because ML models are like calculators.
+
+If you give them:
+
+"20" (string)
+
+"2" (string)
+
+They can’t do math.
+
+So we convert to:
+
+20.0
+
+2.0
+
+2) Features vs Target
+
+From your student dataset:
+
+Features (X):
+
+age
+
+study_hours
+
+Target (y):
+
+marks
+
+🛠 PRACTICAL (Windows + Smile 2.6.0)
+✅ Step 1 — Make sure CSV has NO header
+
+Your students.csv should be like:
+
+Ravi,20,2,45
+Priya,21,5,78
+Aman,19,1,30
+Neha,22,6,88
+Rahul,20,3,60
+Sneha,21,4,72
+
+✅ Step 2 — Create Day2Preprocessing.java
+
+Create this file:
+
+src/main/java/com/darling/ai/Day2Preprocessing.java
+
+
+Paste this code:
+
+package com.darling.ai;
+
+import smile.data.DataFrame;
+import smile.io.Read;
+
+import java.net.URL;
+import java.nio.file.Paths;
+
+public class Day2Preprocessing {
+
+    public static void main(String[] args) throws Exception {
+
+        // 1) Load CSV from resources
+        URL resource = Day2Preprocessing.class
+                .getClassLoader()
+                .getResource("data/students.csv");
+
+        if (resource == null) {
+            throw new RuntimeException("students.csv not found in src/main/resources/data/");
+        }
+
+        var path = Paths.get(resource.toURI());
+        DataFrame df = Read.csv(path);
+
+        System.out.println("=== Raw Dataset Preview ===");
+        System.out.println(df.slice(0, 6));
+
+        // 2) Convert DataFrame -> X and y
+        int n = df.nrows();
+
+        // Features: age, study_hours
+        double[][] X = new double[n][2];
+
+        // Target: marks
+        double[] y = new double[n];
+
+        for (int i = 0; i < n; i++) {
+
+            // Smile 2.6.0 reads columns as V1, V2, V3, V4
+            // V1 = name
+            // V2 = age
+            // V3 = study_hours
+            // V4 = marks
+
+            String ageStr = df.getString(i, 1);
+            String hoursStr = df.getString(i, 2);
+            String marksStr = df.getString(i, 3);
+
+            double age = Double.parseDouble(ageStr.trim());
+            double hours = Double.parseDouble(hoursStr.trim());
+            double marks = Double.parseDouble(marksStr.trim());
+
+            X[i][0] = age;
+            X[i][1] = hours;
+            y[i] = marks;
+        }
+
+        // 3) Print to confirm conversion
+        System.out.println("\n=== Converted Numeric Data ===");
+        for (int i = 0; i < n; i++) {
+            System.out.println("Row " + i +
+                    " -> age=" + X[i][0] +
+                    ", hours=" + X[i][1] +
+                    " | marks=" + y[i]);
+        }
+    }
+}
+
+✅ Expected Output
+
+You should see:
+
+Row 0 -> age=20.0, hours=2.0 | marks=45.0
+Row 1 -> age=21.0, hours=5.0 | marks=78.0
+...
